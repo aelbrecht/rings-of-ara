@@ -13,6 +13,7 @@ type state struct {
 	Enter      bool
 	Map        bool
 	Shift      bool
+	Jump       bool
 	Primary    bool
 	Secondary  bool
 	LastCursor []int
@@ -42,6 +43,7 @@ var s = state{
 	Enter:      false,
 	Map:        false,
 	Shift:      false,
+	Jump:       false,
 	Primary:    false,
 	Secondary:  false,
 	LastCursor: []int{0, 0},
@@ -101,7 +103,7 @@ func HandleGameInput(w *world.Model, es *EventQueue) {
 		es.Add(Right, nil)
 	}
 	if ebiten.IsKeyPressed(ebiten.KeySpace) {
-		es.Add(Jump, nil)
+		es.Add(Fly, nil)
 	}
 
 	// handle actions
@@ -110,6 +112,12 @@ func HandleGameInput(w *world.Model, es *EventQueue) {
 	} else if s.Inventory {
 		es.Add(Inventory, nil)
 		s.Inventory = false
+	}
+	if ebiten.IsKeyPressed(ebiten.KeySpace) && !s.Jump {
+		es.Add(Jump, nil)
+		s.Jump = true
+	} else if s.Jump && !ebiten.IsKeyPressed(ebiten.KeySpace) {
+		s.Jump = false
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyE) {
 		s.Use = true

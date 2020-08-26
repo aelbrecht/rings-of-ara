@@ -17,6 +17,8 @@ func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
 		op.GeoM.Translate(16, 0)
 	}
 
+	op.GeoM.Scale(3, 3)
+
 	op.GeoM.Translate(300, 200)
 
 	i := 0
@@ -30,12 +32,10 @@ func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
 	if ch.Pos.Y < 0 {
 		i = 2
 		j = 3
-		if ch.Vel.Y > 0{
+		if ch.Vel.Y > 0 {
 			if ch.Pos.Y > -15 {
-				j = 0
-			} else if ch.Pos.Y > -30 {
 				j = 1
-			} else if ch.Pos.Y > -45 {
+			} else if ch.Pos.Y > -30 {
 				j = 2
 			}
 		} else {

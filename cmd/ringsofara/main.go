@@ -64,8 +64,8 @@ func main() {
 		EventContainer: events.MakeEventContainer(),
 		Props: GameProperties{
 			Screen: GameScreen{
-				H: 400,
-				W: 600,
+				H: 800,
+				W: 1280,
 			},
 		},
 		EventHandler: events.HandleEvents,
@@ -76,7 +76,7 @@ func main() {
 	}
 
 	// set parameters and start loop
-	ebiten.SetWindowSize(g.Props.Screen.W*2, g.Props.Screen.H*2)
+	ebiten.SetWindowSize(g.Props.Screen.W, g.Props.Screen.H)
 	ebiten.SetWindowTitle("Rings of Ara")
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
