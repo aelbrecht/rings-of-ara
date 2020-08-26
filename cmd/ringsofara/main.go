@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
 	"log"
 	"rings-of-ara/internal/draw/characters"
@@ -44,12 +46,26 @@ func (g *Game) Layout(_, _ int) (int, int) {
 	return g.Props.Screen.W, g.Props.Screen.H
 }
 
+var tmpimg, _ = ebiten.NewImage(1280, 800, ebiten.FilterDefault)
+
 // draw loop
 // uses a buffer to make drawing cleaner from different routines
 func (g *Game) Draw(screen *ebiten.Image) {
 	_ = screen.Fill(color.RGBA{228, 241, 254, 255})
+	tmpimg.Fill(color.RGBA{50, 30, 5, 255})
+	tmpopt := ebiten.DrawImageOptions{}
+	tmpopt.GeoM.Translate(0, 500 - 16)
+	screen.DrawImage(tmpimg, &tmpopt)
 	d := g.World.Player.Draw
 	d(g.World.Player, screen)
+
+	_ = ebitenutil.DebugPrint(screen,
+		fmt.Sprintf("TPS: %0.2f\nPosition: %f,%f",
+			ebiten.CurrentTPS(),
+			float64(g.World.Player.Pos.X),
+			float64(g.World.Player.Pos.Y),
+		),
+	)
 }
 
 func main() {

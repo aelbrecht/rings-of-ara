@@ -19,10 +19,10 @@ func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
 
 	op.GeoM.Scale(3, 3)
 
-	op.GeoM.Translate(300, 200)
+	op.GeoM.Translate(300, 400)
 
 	i := 0
-	j := (ch.Step / 10) % 6
+	j := (ch.Step / 30) % 6
 
 	if ch.Vel.X != 0 {
 		i = 1
@@ -30,20 +30,14 @@ func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
 	}
 
 	if ch.Pos.Y < 0 {
+		f := (ch.Step / 6) % 2
 		i = 2
-		j = 3
-		if ch.Vel.Y > 0 {
-			if ch.Pos.Y > -15 {
-				j = 1
-			} else if ch.Pos.Y > -30 {
-				j = 2
-			}
-		} else {
-			if ch.Pos.Y > -15 {
-				j = 5
-			} else if ch.Pos.Y > -30 {
-				j = 4
-			}
+		if ch.Vel.Y < 0 {
+			j = 0 + f
+		} else if ch.Vel.Y >= 3 {
+			j = 4 + f
+		} else if ch.Vel.Y >= 0 {
+			j = 2 + f
 		}
 	}
 

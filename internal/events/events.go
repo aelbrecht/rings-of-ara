@@ -47,7 +47,7 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 			break
 		case Jump:
 			if w.Player.Pos.Y == 0 {
-				w.Player.Vel.Y = -10
+				w.Player.Vel.Y = -11
 			}
 		}
 	}
