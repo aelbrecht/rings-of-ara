@@ -6,7 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
 	"log"
-	"rings-of-ara/internal/draw/characters"
+	"rings-of-ara/internal/draw"
 	"rings-of-ara/internal/events"
 	"rings-of-ara/internal/world"
 )
@@ -51,19 +51,28 @@ var tmpimg, _ = ebiten.NewImage(1280, 800, ebiten.FilterDefault)
 // draw loop
 // uses a buffer to make drawing cleaner from different routines
 func (g *Game) Draw(screen *ebiten.Image) {
+
+	// fill sky
 	_ = screen.Fill(color.RGBA{228, 241, 254, 255})
-	tmpimg.Fill(color.RGBA{50, 30, 5, 255})
-	tmpopt := ebiten.DrawImageOptions{}
-	tmpopt.GeoM.Translate(0, 500 - 16)
-	screen.DrawImage(tmpimg, &tmpopt)
+
+	// fill block layer
+	draw.Planet(g.World, screen)
+
 	d := g.World.Player.Draw
-	d(g.World.Player, screen)
+	d(g.World.Player, g.World, screen)
+
+	chunkDebug := ""
+	activeChunks := g.World.Camera.VisibleChunks()
+	for _, chunk := range activeChunks {
+		chunkDebug += fmt.Sprintf("%d,%d ", chunk.X, chunk.Y)
+	}
 
 	_ = ebitenutil.DebugPrint(screen,
-		fmt.Sprintf("TPS: %0.2f\nPosition: %f,%f",
+		fmt.Sprintf("TPS: %0.2f\nPosition: %f,%f\n%s",
 			ebiten.CurrentTPS(),
 			float64(g.World.Player.Pos.X),
 			float64(g.World.Player.Pos.Y),
+			chunkDebug,
 		),
 	)
 }
@@ -71,9 +80,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 func main() {
 
 	player := &world.Character{
-		Pos:  world.Coordinates{},
+		Pos:  world.Coordinates{10000, 0},
 		Vel:  world.Vector{},
-		Draw: characters.PlayerSprite,
+		Draw: draw.PlayerSprite,
 	}
 
 	g := &Game{
@@ -87,7 +96,15 @@ func main() {
 		EventHandler: events.HandleEvents,
 		InputHandler: events.HandleGameInput,
 		World: &world.Model{
+			Camera: &world.Camera{
+				Subject: player,
+				Size:    world.Rectangle{W: 1280, H: 800},
+			},
 			Player: player,
+			Planet: &world.Planet{
+				Size:   5000,
+				Chunks: make(map[world.ChunkPosition]*world.Chunk),
+			},
 		},
 	}
 

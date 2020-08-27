@@ -1,4 +1,4 @@
-package characters
+package draw
 
 import (
 	"github.com/hajimehoshi/ebiten"
@@ -7,7 +7,7 @@ import (
 	"rings-of-ara/internal/world"
 )
 
-func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
+func PlayerSprite(ch *world.Character, w *world.Model, screen *ebiten.Image) {
 
 	op := &ebiten.DrawImageOptions{}
 
@@ -18,8 +18,6 @@ func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
 	}
 
 	op.GeoM.Scale(3, 3)
-
-	op.GeoM.Translate(300, 400)
 
 	i := 0
 	j := (ch.Step / 30) % 6
@@ -41,7 +39,8 @@ func PlayerSprite(ch *world.Character, screen *ebiten.Image) {
 		}
 	}
 
-	xf, yf := ch.Pos.ToFloat64()
+	xf, yf := ch.Pos.Sub(w.Camera.Offset()).ToFloat64()
+
 	op.GeoM.Translate(xf, yf)
 
 	// create an ebiten image as textures are imported as rgba go images

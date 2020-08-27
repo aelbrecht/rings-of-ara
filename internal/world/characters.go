@@ -6,6 +6,6 @@ type Character struct {
 	Step      int
 	Pos       Coordinates
 	Vel       Vector
-	Draw      func(ch *Character, screen *ebiten.Image)
+	Draw      func(*Character, *Model, *ebiten.Image)
 	Direction int
 }
