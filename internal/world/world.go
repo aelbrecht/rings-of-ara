@@ -1,15 +1,11 @@
 package world
 
-import "github.com/hajimehoshi/ebiten"
-
 type Block struct {
 	Kind uint16
 }
 
-var blockBuffer, _ = ebiten.NewImage(32*3, 32*3, ebiten.FilterDefault)
-
 type Chunk struct {
-	Data [32 * 32]Block
+	Data [ChunkSize * ChunkSize]Block
 }
 
 type Planet struct {

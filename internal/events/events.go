@@ -17,14 +17,14 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 		w.Player.Vel.X = 0
 	}
 
-	w.Player.Vel.Y += 0.6
+	/*w.Player.Vel.Y += 0.6
 	if w.Player.Vel.Y > 6 {
 		w.Player.Vel.Y = 6
 	}
 	if w.Player.Pos.Y >= 0 {
 		w.Player.Pos.Y = 0
 		w.Player.Vel.Y = 0
-	}
+	}*/
 
 	for container.Size > 0 {
 		container.Size--

@@ -17,15 +17,15 @@ func addChunkToList(c ChunkPosition, l []ChunkPosition) []ChunkPosition {
 
 func (c *Camera) VisibleChunks() []ChunkPosition {
 	chunks := make([]ChunkPosition, 0)
-	w2 := c.Size.W / 2
-	h2 := c.Size.H / 2
+	w2 := int64(ChunkPixelSize)
+	h2 := int64(ChunkPixelSize / 2)
 
-	chunks = addChunkToList(Coordinates{-w2, -h2}.Add(c.Offset()).ToChunkPosition(), chunks) // top left
-	chunks = addChunkToList(Coordinates{-w2, h2}.Add(c.Offset()).ToChunkPosition(), chunks)  // bottom left
-	chunks = addChunkToList(Coordinates{0, -h2}.Add(c.Offset()).ToChunkPosition(), chunks)   // middle top
-	chunks = addChunkToList(Coordinates{0, h2}.Add(c.Offset()).ToChunkPosition(), chunks)    // middle bottom
-	chunks = addChunkToList(Coordinates{w2, -h2}.Add(c.Offset()).ToChunkPosition(), chunks)  // top right
-	chunks = addChunkToList(Coordinates{w2, h2}.Add(c.Offset()).ToChunkPosition(), chunks)   // bottom right
+	chunks = addChunkToList(Coordinates{-w2, -h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks) // top left
+	chunks = addChunkToList(Coordinates{-w2, h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks)  // bottom left
+	chunks = addChunkToList(Coordinates{0, -h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks)   // middle top
+	chunks = addChunkToList(Coordinates{0, h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks)    // middle bottom
+	chunks = addChunkToList(Coordinates{w2, -h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks)  // top right
+	chunks = addChunkToList(Coordinates{w2, h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks)   // bottom right
 
 	return chunks
 }
