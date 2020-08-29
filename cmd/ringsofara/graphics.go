@@ -37,7 +37,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	if curBlock != nil {
 		k = curBlock.Kind
 	}
-	mouseDebug := fmt.Sprintf("%d,%d %d,%d %d,%d %d,%d %d,%d b:%d",
+	mouseDebug := fmt.Sprintf("s:%d,%d w:%d,%d c:%d,%d b%d,%d rb:%d,%d b.k:%d",
 		curX, curY,
 		curWorldPos.X, curWorldPos.Y,
 		curChunkPos.X, curChunkPos.Y,
@@ -47,10 +47,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	)
 
 	_ = ebitenutil.DebugPrint(screen,
-		fmt.Sprintf("TPS: %0.2f\nPosition: %f,%f\n%s\n%s",
+		fmt.Sprintf("TPS: %0.2f\nPosition: %d,%d\n%s\n%s",
 			ebiten.CurrentTPS(),
-			float64(g.World.Player.Pos.X),
-			float64(g.World.Player.Pos.Y),
+			g.World.Player.Pos.X,
+			g.World.Player.Pos.Y,
 			chunkDebug,
 			mouseDebug,
 		),

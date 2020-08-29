@@ -18,7 +18,7 @@ func addChunkToList(c ChunkPosition, l []ChunkPosition) []ChunkPosition {
 func (c *Camera) VisibleChunks() []ChunkPosition {
 	chunks := make([]ChunkPosition, 0)
 	w2 := int64(ChunkPixelSize)
-	s2 := c.Size.W / 2
+	s2 := c.Size.W/2 + BlockPixelSize*2
 	h2 := int64(ChunkPixelSize)
 
 	chunks = addChunkToList(Coordinates{-s2, -h2}.Add(c.Subject.Pos).ToChunkPosition(), chunks)     // top left
