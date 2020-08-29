@@ -25,12 +25,12 @@ func (p *Planet) GenerateChunk(coords ChunkPosition) {
 
 	n := opensimplex.NewNormalized(0)
 
-	h := SkyLevel - UnderGroundLevel
+	h := HillsLevel - GroundLevel
 	for i, block := range c.Data {
 		x, y := BlockIndexToPosition(i).Values()
 		v := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/100, 0)
 		yc := int64(coords.Y)*ChunkSize + int64(y)
-		lvl := UnderGroundLevel + int64(v*float64(h))
+		lvl := GroundLevel + int64(v*float64(h))
 		if yc < lvl {
 			block.Kind = 1
 		}

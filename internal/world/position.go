@@ -6,7 +6,9 @@ const (
 	ChunkPixelSize   = BlockPixelSize * ChunkSize
 	SeaLevel         = ChunkSize * 100
 	UnderGroundLevel = ChunkSize * 80
+	GroundLevel      = ChunkSize * 90
 	SkyLevel         = ChunkSize * 120
+	HillsLevel       = ChunkSize * 110
 )
 
 type Coordinates struct {
