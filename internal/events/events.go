@@ -10,10 +10,10 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 
 	w.Player.Step += 1
 
-	if w.Player.Vel.X > 0.2 {
-		w.Player.Vel.X += -0.2
-	} else if w.Player.Vel.X < -0.2 {
-		w.Player.Vel.X += 0.2
+	if w.Player.Vel.X > 0.19 {
+		w.Player.Vel.X -= 0.12
+	} else if w.Player.Vel.X < -0.19 {
+		w.Player.Vel.X += 0.12
 	} else {
 		w.Player.Vel.X = 0
 	}
@@ -28,22 +28,27 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 		}
 	}
 
+	maxV := 4.0
+
 	for container.Size > 0 {
 		container.Size--
 		event := container.Items[container.Size]
 
 		switch event.Kind {
+		case Shift:
+			maxV = 6
+			break
 		case Left:
-			w.Player.Vel.X += -0.75
-			if w.Player.Vel.X < -4 {
-				w.Player.Vel.X = -4
+			w.Player.Vel.X += -0.2
+			if w.Player.Vel.X < -maxV {
+				w.Player.Vel.X = -maxV
 			}
 			w.Player.Direction = -1
 			break
 		case Right:
-			w.Player.Vel.X += 0.75
-			if w.Player.Vel.X > 4 {
-				w.Player.Vel.X = 4
+			w.Player.Vel.X += 0.2
+			if w.Player.Vel.X > maxV {
+				w.Player.Vel.X = maxV
 			}
 			w.Player.Direction = 1
 			break

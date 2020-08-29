@@ -24,7 +24,11 @@ func PlayerSprite(ch *world.Character, w *world.Model, screen *ebiten.Image) {
 
 	if ch.Vel.X != 0 {
 		i = 1
-		j = (ch.Step / 7) % 6
+		if ch.Vel.X <= 4 {
+			j = (ch.Step / 6) % 6
+		} else {
+			j = (ch.Step / 5) % 6
+		}
 	}
 
 	if ch.Vel.Y != 0 {

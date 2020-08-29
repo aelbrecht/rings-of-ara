@@ -61,7 +61,7 @@ func Chunk(ch *world.Chunk, dst *ebiten.Image, debug bool) {
 		Rectangle(world.ChunkPixelSize, color.RGBA{255, 0, 0, 50}, chunkBufferArray)
 	}
 
-	dst.ReplacePixels(chunkBufferArray)
+	_ = dst.ReplacePixels(chunkBufferArray)
 }
 
 func Planet(w *world.Model, screen *ebiten.Image) {

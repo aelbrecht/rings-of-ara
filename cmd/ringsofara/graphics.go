@@ -47,10 +47,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	)
 
 	_ = ebitenutil.DebugPrint(screen,
-		fmt.Sprintf("TPS: %0.2f\nPosition: %d,%d\n%s\n%s",
+		fmt.Sprintf("TPS: %0.2f\npos: %d,%d vel:%f,%f\n%s\n%s",
 			ebiten.CurrentTPS(),
 			g.World.Player.Pos.X,
 			g.World.Player.Pos.Y,
+			g.World.Player.Vel.X,
+			g.World.Player.Vel.Y,
 			chunkDebug,
 			mouseDebug,
 		),
