@@ -32,11 +32,19 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	curWorldPos := g.World.Camera.ToWorld(world.Coordinates{int64(curX), int64(curY)})
 	curChunkPos := curWorldPos.ToChunkPosition()
 	curBlockPos := curWorldPos.ToBlockPosition()
-	mouseDebug := fmt.Sprintf("%d,%d %d,%d %d,%d %d,%d",
+	curRelBlockPos := curWorldPos.ToRelativeBlockPosition()
+	curBlock := g.World.Planet.GetBlock(curWorldPos)
+	var k uint16
+	if curBlock != nil {
+		k = curBlock.Kind
+	}
+	mouseDebug := fmt.Sprintf("%d,%d %d,%d %d,%d %d,%d %d,%d b:%d",
 		curX, curY,
 		curWorldPos.X, curWorldPos.Y,
 		curChunkPos.X, curChunkPos.Y,
 		curBlockPos.X, curBlockPos.Y,
+		curRelBlockPos.X, curRelBlockPos.Y,
+		k,
 	)
 
 	_ = ebitenutil.DebugPrint(screen,

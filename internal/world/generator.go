@@ -28,7 +28,7 @@ func (p *Planet) GenerateChunk(coords ChunkPosition) {
 	h := SkyLevel - UnderGroundLevel
 	for i, block := range c.Data {
 		x, y := BlockIndexToPosition(i).Values()
-		v := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/1000, 0)
+		v := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/100, 0)
 		yc := int64(coords.Y)*ChunkSize + int64(y)
 		lvl := UnderGroundLevel + int64(v*float64(h))
 		if yc < lvl {

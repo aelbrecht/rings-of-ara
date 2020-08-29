@@ -6,7 +6,7 @@ const (
 	ChunkPixelSize   = BlockPixelSize * ChunkSize
 	SeaLevel         = ChunkSize * 100
 	UnderGroundLevel = ChunkSize * 80
-	SkyLevel = ChunkSize * 120
+	SkyLevel         = ChunkSize * 120
 )
 
 type Coordinates struct {
@@ -38,6 +38,14 @@ type Rectangle struct {
 	W, H int64
 }
 
+type CharacterMask struct {
+	W, H int
+}
+
+func (m CharacterMask) PixelValues() (int, int) {
+	return m.W * 3, m.H * 3
+}
+
 type ChunkPosition struct {
 	X, Y uint32
 }
@@ -63,8 +71,21 @@ func BlockIndexToPosition(i int) RelativeBlockPosition {
 	}
 }
 
+func BlockPositionToIndex(p RelativeBlockPosition) int {
+	return p.Y*ChunkSize + p.X
+}
+
 func (c Coordinates) ToChunkPosition() ChunkPosition {
 	return c.ToBlockPosition().ToChunkPosition()
+}
+
+func (c Coordinates) ToRelativeBlockPosition() RelativeBlockPosition {
+	p := c.ToBlockPosition()
+	rp := RelativeBlockPosition{
+		X: int(p.X % ChunkSize),
+		Y: int(p.Y % ChunkSize),
+	}
+	return rp
 }
 
 func (c BlockPosition) ToChunkPosition() ChunkPosition {
