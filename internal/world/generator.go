@@ -17,7 +17,9 @@ func ChunkGenerator(w *Model) {
 }
 
 func (p *Planet) GenerateChunk(coords ChunkPosition) {
+	p.Lock.Lock()
 	c := p.Chunks[coords]
+	p.Lock.Unlock()
 	if c != nil {
 		return
 	}
@@ -28,9 +30,9 @@ func (p *Planet) GenerateChunk(coords ChunkPosition) {
 	h := HillsLevel - GroundLevel
 	for i, block := range c.Data {
 		x, y := BlockIndexToPosition(i).Values()
-		v := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/1000, 0)
-		v2 := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/100, 0)
-		v3 := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/10, 0)
+		v := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/3000, 0)
+		v2 := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/300, 0)
+		v3 := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/30, 0)
 		yc := int64(coords.Y)*ChunkSize + int64(y)
 		lvl := GroundLevel + int64(v*float64(h)+v2*float64(ChunkSize)+v3*float64(ChunkSize/2))
 		if yc < lvl {
@@ -39,5 +41,8 @@ func (p *Planet) GenerateChunk(coords ChunkPosition) {
 		c.Data[i] = block
 	}
 	fmt.Printf("generated chunk %d,%d\n", coords.X, coords.Y)
+
+	p.Lock.Lock()
 	p.Chunks[coords] = c
+	p.Lock.Unlock()
 }

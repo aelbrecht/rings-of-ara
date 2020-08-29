@@ -14,6 +14,7 @@ type state struct {
 	Map        bool
 	Shift      bool
 	Jump       bool
+	Debug      bool
 	Primary    bool
 	Secondary  bool
 	LastCursor []int
@@ -43,6 +44,7 @@ var s = state{
 	Enter:      false,
 	Map:        false,
 	Shift:      false,
+	Debug:      false,
 	Jump:       false,
 	Primary:    false,
 	Secondary:  false,
@@ -142,6 +144,12 @@ func HandleGameInput(w *world.Model, es *EventQueue) {
 	} else if s.Map {
 		es.Add(Map, nil)
 		s.Map = false
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyF1) {
+		s.Debug = true
+	} else if s.Debug {
+		es.Add(Debug, nil)
+		s.Debug = false
 	}
 
 	// handle modifiers

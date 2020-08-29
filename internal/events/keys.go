@@ -30,4 +30,5 @@ const (
 	Shift         = "INPUT_SHIFT"
 	Alt           = "INPUT_ALT"
 	Map           = "INPUT_MAP"
+	Debug         = "INPUT_DEBUG"
 )

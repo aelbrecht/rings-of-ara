@@ -2,6 +2,7 @@ package events
 
 import (
 	"math"
+	"rings-of-ara/internal/draw"
 	"rings-of-ara/internal/world"
 )
 
@@ -57,6 +58,10 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 		case Down:
 			w.Player.Vel.Y = -4
 			break
+		case Debug:
+			w.Debug = !w.Debug
+			draw.ClearChunks()
+			break
 		}
 	}
 
@@ -67,10 +72,35 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 	newAbsX := w.Player.Pos.X + int64(math.Round(w.Player.Vel.X))
 	newAbsY := w.Player.Pos.Y + int64(math.Round(w.Player.Vel.Y))
 
+	jumped := false
+	if w.Player.Vel.X < 0 {
+		b1 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X - world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize + 1})
+		b2 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X - world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize/2})
+		if onSolid && b1 != nil && b2 != nil && b1.Kind == 0 && b2.Kind != 0 {
+			w.Player.Vel.Y = 7
+			jumped = true
+		}
+	} else if w.Player.Vel.X > 0 {
+		b1 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X + int64(pw) + world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize + 1})
+		b2 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X + int64(pw) + world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize/2})
+		if onSolid && b1 != nil && b2 != nil && b1.Kind == 0 && b2.Kind != 0 {
+			w.Player.Vel.Y = 7
+			jumped = true
+		}
+	}
+
+	if !MaskCollision(newAbsX, newAbsY, pw, ph, w) {
+		w.Player.Pos.X = newAbsX
+		w.Player.Pos.Y = newAbsY
+		return
+	}
+
 	if MaskCollision(newAbsX, w.Player.Pos.Y, pw, ph, w) {
-		w.Player.Vel.X /= 2
-		if math.Abs(w.Player.Vel.X) < 0.5 {
-			w.Player.Vel.X = 0
+		if !jumped {
+			w.Player.Vel.X /= 2
+			if math.Abs(w.Player.Vel.X) < 0.5 {
+				w.Player.Vel.X = 0
+			}
 		}
 	} else {
 		w.Player.Pos.X = newAbsX

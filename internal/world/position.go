@@ -1,7 +1,7 @@
 package world
 
 const (
-	BlockPixelSize   = 16 * 3
+	BlockPixelSize   = 10 * 3
 	ChunkSize        = 16
 	ChunkPixelSize   = BlockPixelSize * ChunkSize
 	SeaLevel         = ChunkSize * 100

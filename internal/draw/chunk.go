@@ -35,16 +35,24 @@ func enqueueChunk(coords world.ChunkPosition) {
 	if enqueuedCurrentCurrent == coords {
 		return
 	}
-	for _, chunk := range enqueuedChunks {
-		if chunk == coords {
+	for i := 0; i < enqueuedChunksSize; i++ {
+		if enqueuedChunks[i] == coords {
 			return
 		}
 	}
 	enqueuedChunksLock.Lock()
+	chunkBufferLock.Lock()
 	chunkBuffer[coords], _ = ebiten.NewImage(world.ChunkPixelSize, world.ChunkPixelSize, ebiten.FilterDefault)
+	chunkBufferLock.Unlock()
 	enqueuedChunks[enqueuedChunksSize] = coords
 	enqueuedChunksSize += 1
 	enqueuedChunksLock.Unlock()
+}
+
+func ClearChunks() {
+	chunkBufferLock.Lock()
+	chunkBuffer = make(map[world.ChunkPosition]*ebiten.Image)
+	chunkBufferLock.Unlock()
 }
 
 func ChunkRenderer(w *world.Model) {
@@ -62,7 +70,9 @@ func ChunkRenderer(w *world.Model) {
 		enqueuedCurrentCurrent = enqueuedChunks[enqueuedChunksSize-1]
 
 		// get chunk if it has been generated
+		w.Planet.Lock.Lock()
 		ch := w.Planet.Chunks[enqueuedCurrentCurrent]
+		w.Planet.Lock.Unlock()
 		if ch == nil {
 			enqueuedChunksLock.Unlock() // EXIT LOCK
 			continue
@@ -75,7 +85,9 @@ func ChunkRenderer(w *world.Model) {
 
 		startTime := time.Now()
 
-		Chunk(ch, chunkBuffer[enqueuedCurrentCurrent])
+		chunkBufferLock.Lock()
+		Chunk(ch, chunkBuffer[enqueuedCurrentCurrent], w.Debug)
+		chunkBufferLock.Unlock()
 
 		elapsed := time.Now().Sub(startTime)
 
