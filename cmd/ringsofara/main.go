@@ -52,7 +52,7 @@ func main() {
 
 	player := &world.Character{
 		Mask: world.CharacterMask{16, 28},
-		Pos:  world.Coordinates{10000, world.ChunkPixelSize*106 + world.BlockPixelSize*10},
+		Pos:  world.Coordinates{10000, world.ChunkPixelSize*98 + world.BlockPixelSize*10},
 		Vel:  world.Vector{},
 		Draw: draw.PlayerSprite,
 	}
