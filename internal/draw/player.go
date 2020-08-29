@@ -39,7 +39,7 @@ func PlayerSprite(ch *world.Character, w *world.Model, screen *ebiten.Image) {
 		}
 	}
 
-	xf, yf := ch.Pos.Sub(w.Camera.Offset()).ValuesFloat()
+	xf, yf := w.Camera.ToScreen(ch.Pos).ValuesFloat()
 
 	op.GeoM.Translate(xf, yf)
 

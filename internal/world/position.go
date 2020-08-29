@@ -1,10 +1,12 @@
 package world
 
 const (
-	BlockPixelSize = 16 * 3
-	ChunkSize      = 16
-	ChunkPixelSize = BlockPixelSize * ChunkSize
-	SeaLevel       = ChunkSize * 100
+	BlockPixelSize   = 16 * 3
+	ChunkSize        = 16
+	ChunkPixelSize   = BlockPixelSize * ChunkSize
+	SeaLevel         = ChunkSize * 100
+	UnderGroundLevel = ChunkSize * 80
+	SkyLevel = ChunkSize * 120
 )
 
 type Coordinates struct {
@@ -15,6 +17,13 @@ func (c Coordinates) Add(b Coordinates) Coordinates {
 	return Coordinates{
 		X: c.X + b.X,
 		Y: c.Y + b.Y,
+	}
+}
+
+func (c Coordinates) Inv() Coordinates {
+	return Coordinates{
+		X: -c.X,
+		Y: -c.Y,
 	}
 }
 

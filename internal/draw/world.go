@@ -22,11 +22,25 @@ func Chunk(ch *world.Chunk, dst *ebiten.Image) {
 	}
 
 	w := world.ChunkPixelSize
-	c := color.RGBA{0, 0, 0, 255}
+	c := color.RGBA{0, 0, 0, 50}
 	for i := range ch.Data {
+
 		x, y := world.BlockIndexToPosition(i).Values()
-		xp := x*world.BlockPixelSize
-		yp := y*world.BlockPixelSize
+		xp := x * world.BlockPixelSize
+		yp := y * world.BlockPixelSize
+
+		cc := color.RGBA{0, 0, 0, 0}
+		switch ch.Data[i].Kind {
+		case 1:
+			cc = color.RGBA{0, 200, 0, 255}
+			break
+		}
+		for xx := 0; xx < world.BlockPixelSize; xx++ {
+			for yy := 0; yy < world.BlockPixelSize; yy++ {
+				SetPixel(xp+xx, yp+yy, w, cc, chunkBufferArray)
+			}
+		}
+
 		for i := xp; i < xp+world.BlockPixelSize; i++ {
 			SetPixel(i*world.BlockPixelSize, yp, w, c, chunkBufferArray)
 			SetPixel(i, yp+world.BlockPixelSize-1, w, c, chunkBufferArray)
@@ -37,7 +51,7 @@ func Chunk(ch *world.Chunk, dst *ebiten.Image) {
 		}
 	}
 
-	Rectangle(world.ChunkPixelSize, color.RGBA{255, 0, 0, 255}, chunkBufferArray)
+	Rectangle(world.ChunkPixelSize, color.RGBA{255, 0, 0, 25}, chunkBufferArray)
 
 	dst.ReplacePixels(chunkBufferArray)
 }
@@ -51,7 +65,8 @@ func Planet(w *world.Model, screen *ebiten.Image) {
 		}
 		chunkTexture := chunkBuffer[coords]
 		op := ebiten.DrawImageOptions{}
-		x, y := coords.ToCoordinates().Sub(w.Camera.Offset()).ValuesFloat()
+		op.GeoM.Scale(1, -1)
+		x, y := w.Camera.ToScreen(coords.ToCoordinates()).ValuesFloat()
 		op.GeoM.Translate(x, y)
 		screen.DrawImage(chunkTexture, &op)
 	}

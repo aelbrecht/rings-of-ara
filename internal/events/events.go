@@ -17,6 +17,7 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 		w.Player.Vel.X = 0
 	}
 
+	w.Player.Vel.Y = 0
 	/*w.Player.Vel.Y += 0.6
 	if w.Player.Vel.Y > 6 {
 		w.Player.Vel.Y = 6
@@ -49,6 +50,13 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 			if w.Player.Pos.Y == 0 {
 				w.Player.Vel.Y = -11
 			}
+			break
+		case Up:
+			w.Player.Vel.Y = 4
+			break
+		case Down:
+			w.Player.Vel.Y = -4
+			break
 		}
 	}
 
