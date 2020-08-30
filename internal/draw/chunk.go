@@ -42,7 +42,7 @@ func enqueueChunk(coords world.ChunkPosition) {
 	}
 	enqueuedChunksLock.Lock()
 	chunkBufferLock.Lock()
-	chunkBuffer[coords], _ = ebiten.NewImage(world.ChunkPixelSize, world.ChunkPixelSize, ebiten.FilterDefault)
+	chunkBuffer[coords], _ = ebiten.NewImage(world.ChunkPointSize, world.ChunkPointSize, ebiten.FilterDefault)
 	chunkBufferLock.Unlock()
 	enqueuedChunks[enqueuedChunksSize] = coords
 	enqueuedChunksSize += 1
@@ -86,7 +86,7 @@ func ChunkRenderer(w *world.Model) {
 		startTime := time.Now()
 
 		chunkBufferLock.Lock()
-		Chunk(ch, chunkBuffer[enqueuedCurrentCurrent], w.Debug)
+		Chunk(ch,enqueuedCurrentCurrent, chunkBuffer[enqueuedCurrentCurrent], w.Debug)
 		chunkBufferLock.Unlock()
 
 		elapsed := time.Now().Sub(startTime)

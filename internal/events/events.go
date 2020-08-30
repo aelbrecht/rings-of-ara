@@ -81,14 +81,14 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 	if w.Player.Vel.X < 0 {
 		b1 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X - world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize + 1})
 		b2 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X - world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize/2})
-		if onSolid && b1 != nil && b2 != nil && b1.Kind == 0 && b2.Kind != 0 {
+		if onSolid && b1 != nil && b2 != nil && !b1.Solid && b2.Solid {
 			w.Player.Vel.Y = 7
 			jumped = true
 		}
 	} else if w.Player.Vel.X > 0 {
 		b1 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X + int64(pw) + world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize + 1})
 		b2 := w.Planet.GetBlock(world.Coordinates{w.Player.Pos.X + int64(pw) + world.BlockPixelSize, w.Player.Pos.Y - int64(w.Player.Mask.H)*3 + world.BlockPixelSize/2})
-		if onSolid && b1 != nil && b2 != nil && b1.Kind == 0 && b2.Kind != 0 {
+		if onSolid && b1 != nil && b2 != nil && !b1.Solid && b2.Solid {
 			w.Player.Vel.Y = 7
 			jumped = true
 		}
@@ -177,7 +177,7 @@ func MaskCollision(x int64, y int64, pw int, ph int, w *world.Model) bool {
 func CheckCollision(p world.Coordinates, w *world.Model) bool {
 	b := w.Planet.GetBlock(p)
 	if b != nil {
-		return b.Kind != 0
+		return b.Solid
 	}
 	return false
 }

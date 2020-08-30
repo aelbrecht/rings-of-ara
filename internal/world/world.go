@@ -3,7 +3,8 @@ package world
 import "sync"
 
 type Block struct {
-	Kind uint16
+	Kind  uint16
+	Solid bool
 }
 
 type Chunk struct {

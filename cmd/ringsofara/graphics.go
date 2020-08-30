@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"image/color"
 	"rings-of-ara/internal/draw"
 	"rings-of-ara/internal/world"
 )
@@ -13,7 +14,7 @@ import (
 func (g *Game) Draw(screen *ebiten.Image) {
 
 	// fill sky
-	_ = screen.Clear()
+	_ = screen.Fill(color.RGBA{228, 241, 254, 255})
 
 	// fill block layer
 	draw.Planet(g.World, screen)

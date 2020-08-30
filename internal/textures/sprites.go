@@ -6,6 +6,7 @@ import (
 	_ "image/png"
 	"log"
 	"os"
+	"rings-of-ara/internal/world"
 )
 
 type Texture struct {
@@ -39,6 +40,6 @@ func (t *Texture) Image() *image.RGBA {
 
 func (t *Texture) Tile(x int, y int) Texture {
 	return Texture{
-		image: t.image.SubImage(image.Rect(x*16, y*16, (x+1)*16, (y+1)*16)).(*image.RGBA),
+		image: t.image.SubImage(image.Rect(x*world.BlockSize, y*world.BlockSize, (x+1)*world.BlockSize, (y+1)*world.BlockSize)).(*image.RGBA),
 	}
 }

@@ -3,8 +3,11 @@ package world
 import (
 	"fmt"
 	"github.com/ojrac/opensimplex-go"
+	"math/rand"
 	"time"
 )
+
+var n = opensimplex.NewNormalized(0)
 
 // enqueue chunk generation
 func ChunkGenerator(w *Model) {
@@ -16,6 +19,39 @@ func ChunkGenerator(w *Model) {
 	}
 }
 
+func GetBlockType(x int, y int, coords ChunkPosition, m *Model) {
+}
+
+func TheoreticalSolidType(coords Coordinates) bool {
+	h := HillsLevel - GroundLevel
+	v := n.Eval2(float64(coords.X)/3000, 0)
+	v2 := n.Eval2(float64(coords.X)/300, 0)
+	v3 := n.Eval2(float64(coords.X)/30, 0)
+	lvl := GroundLevel + int64(v*float64(h)+v2*float64(ChunkSize)+v3*float64(ChunkSize/2))
+	if coords.Y <= lvl {
+		return true
+	}
+	return false
+}
+
+func TheoreticalBlockType(coords Coordinates) uint16 {
+	h := HillsLevel - GroundLevel
+	v := n.Eval2(float64(coords.X)/3000, 0)
+	v2 := n.Eval2(float64(coords.X)/300, 0)
+	v3 := n.Eval2(float64(coords.X)/30, 0)
+	lvl := GroundLevel + int64(v*float64(h)+v2*float64(ChunkSize)+v3*float64(ChunkSize/2))
+	if coords.Y == lvl+1 {
+		if rand.Float64() < 0.3 {
+			return 3
+		}
+	} else if coords.Y == lvl {
+		return 2
+	} else if coords.Y < lvl {
+		return 1
+	}
+	return 0
+}
+
 func (p *Planet) GenerateChunk(coords ChunkPosition) {
 	p.Lock.Lock()
 	c := p.Chunks[coords]
@@ -25,18 +61,12 @@ func (p *Planet) GenerateChunk(coords ChunkPosition) {
 	}
 	c = &Chunk{}
 
-	n := opensimplex.NewNormalized(0)
-
-	h := HillsLevel - GroundLevel
 	for i, block := range c.Data {
-		x, y := BlockIndexToPosition(i).Values()
-		v := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/3000, 0)
-		v2 := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/300, 0)
-		v3 := n.Eval2(float64(coords.X*ChunkSize+uint32(x))/30, 0)
-		yc := int64(coords.Y)*ChunkSize + int64(y)
-		lvl := GroundLevel + int64(v*float64(h)+v2*float64(ChunkSize)+v3*float64(ChunkSize/2))
-		if yc < lvl {
-			block.Kind = 1
+		bl := BlockIndexToPosition(i)
+		block.Solid = true
+		block.Kind = TheoreticalBlockType(CombineChunkBlockPosition(coords, bl))
+		if block.Kind == 3 || block.Kind == 0 {
+			block.Solid = false
 		}
 		c.Data[i] = block
 	}

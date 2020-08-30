@@ -1,9 +1,11 @@
 package world
 
 const (
-	BlockPixelSize   = 10 * 3
+	BlockSize        = 10
+	BlockPixelSize   = BlockSize * 3
 	ChunkSize        = 16
 	ChunkPixelSize   = BlockPixelSize * ChunkSize
+	ChunkPointSize   = BlockSize * ChunkSize
 	SeaLevel         = ChunkSize * 100
 	UnderGroundLevel = ChunkSize * 80
 	GroundLevel      = ChunkSize * 90
@@ -13,6 +15,13 @@ const (
 
 type Coordinates struct {
 	X, Y int64
+}
+
+func CombineChunkBlockPosition(ch ChunkPosition, bl RelativeBlockPosition) Coordinates {
+	return Coordinates{
+		X: int64(ch.X*ChunkSize + uint32(bl.X)),
+		Y: int64(ch.Y*ChunkSize + uint32(bl.Y)),
+	}
 }
 
 func (c Coordinates) Add(b Coordinates) Coordinates {
