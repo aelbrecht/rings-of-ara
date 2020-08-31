@@ -1,10 +1,15 @@
 package world
 
-import "sync"
+import (
+	"github.com/hajimehoshi/ebiten"
+	"sync"
+)
 
 type Block struct {
-	Kind  uint16
-	Solid bool
+	Kind    uint16
+	Solid   bool
+	Variant uint8
+	Texture *ebiten.Image
 }
 
 type Chunk struct {

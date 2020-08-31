@@ -17,7 +17,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	_ = screen.Fill(color.RGBA{228, 241, 254, 255})
 
 	// fill block layer
-	draw.Planet(g.World, screen)
+	g.Buffers.BlockLayer.Clear()
+	draw.BlockLayer(g.World, g.Buffers.BlockLayer)
+	_ = screen.DrawImage(g.Buffers.BlockLayer, nil)
 
 	d := g.World.Player.Draw
 	d(g.World.Player, g.World, screen)
@@ -48,8 +50,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	)
 
 	_ = ebitenutil.DebugPrint(screen,
-		fmt.Sprintf("TPS: %0.2f\npos: %d,%d vel:%f,%f\n%s\n%s",
+		fmt.Sprintf("TPS: %0.0f\nFPS: %0.0f\npos: %d,%d vel:%f,%f\n%s\n%s",
 			ebiten.CurrentTPS(),
+			ebiten.CurrentFPS(),
 			g.World.Player.Pos.X,
 			g.World.Player.Pos.Y,
 			g.World.Player.Vel.X,

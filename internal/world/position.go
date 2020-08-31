@@ -17,10 +17,18 @@ type Coordinates struct {
 	X, Y int64
 }
 
+// todo :this is wrong
 func CombineChunkBlockPosition(ch ChunkPosition, bl RelativeBlockPosition) Coordinates {
 	return Coordinates{
 		X: int64(ch.X*ChunkSize + uint32(bl.X)),
 		Y: int64(ch.Y*ChunkSize + uint32(bl.Y)),
+	}
+}
+
+func CombineChunkBlockPosition2(ch ChunkPosition, bl RelativeBlockPosition) Coordinates {
+	return Coordinates{
+		X: int64(ch.X*ChunkSize+uint32(bl.X)) * BlockPixelSize,
+		Y: int64(ch.Y*ChunkSize+uint32(bl.Y)) * BlockPixelSize,
 	}
 }
 

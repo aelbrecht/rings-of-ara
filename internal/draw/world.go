@@ -4,6 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"image/color"
 	"math/rand"
+	"rings-of-ara/internal/blocks"
 	"rings-of-ara/internal/textures"
 	"rings-of-ara/internal/world"
 	"sync"
@@ -59,9 +60,9 @@ func Chunk(ch *world.Chunk, pos world.ChunkPosition, dst *ebiten.Image, debug bo
 				row = 0
 				co := world.CombineChunkBlockPosition(pos, rel)
 				co.X -= 1
-				left := world.TheoreticalSolidType(co)
+				left := blocks.TheoreticalSolidType(co)
 				co.X += 2
-				right := world.TheoreticalSolidType(co)
+				right := blocks.TheoreticalSolidType(co)
 				if !left && !right {
 					lb = 5
 					ub = 6
@@ -115,20 +116,38 @@ func Chunk(ch *world.Chunk, pos world.ChunkPosition, dst *ebiten.Image, debug bo
 	_ = dst.ReplacePixels(chunkBufferArray)
 }
 
-func Planet(w *world.Model, screen *ebiten.Image) {
+func BlockLayer(w *world.Model, screen *ebiten.Image) {
+
+	// draw visible chunks on screen
 	for _, coords := range w.Camera.VisibleChunks() {
-		chunkBufferLock.Lock()
-		if chunkBuffer[coords] == nil {
-			chunkBufferLock.Unlock()
-			enqueueChunk(coords)
+
+		chunk := w.Planet.Chunks[coords]
+		if chunk == nil {
 			continue
 		}
-		chunkTexture := chunkBuffer[coords]
-		chunkBufferLock.Unlock()
-		op := ebiten.DrawImageOptions{}
-		op.GeoM.Scale(3, -3)
-		x, y := w.Camera.ToScreen(coords.ToCoordinates()).ValuesFloat()
-		op.GeoM.Translate(x, y)
-		screen.DrawImage(chunkTexture, &op)
+
+		for i, block := range chunk.Data {
+
+			if block.Texture == nil {
+				continue
+			}
+
+			op := ebiten.DrawImageOptions{}
+
+			// adjust for flipped y axis
+			op.GeoM.Translate(0, -world.BlockSize)
+
+			// scale blocks 3x
+			op.GeoM.Scale(3, 3)
+
+			// get screen position of block
+			pos := world.CombineChunkBlockPosition2(coords, world.BlockIndexToPosition(i))
+			x, y := w.Camera.ToScreen(pos).ValuesFloat()
+			op.GeoM.Translate(x, y)
+
+			sub := block.Texture
+
+			screen.DrawImage(sub, &op)
+		}
 	}
 }
