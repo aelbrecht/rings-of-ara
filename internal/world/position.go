@@ -80,8 +80,13 @@ type RelativeBlockPosition struct {
 func (pos RelativeBlockPosition) Values() (int, int) {
 	return pos.X, pos.Y
 }
+
 func (pos RelativeBlockPosition) ValuesFloat() (float64, float64) {
 	return float64(pos.X), float64(pos.Y)
+}
+
+func (pos RelativeBlockPosition) Index() int {
+	return pos.Y*ChunkSize + pos.X
 }
 
 func BlockIndexToPosition(i int) RelativeBlockPosition {
@@ -91,10 +96,6 @@ func BlockIndexToPosition(i int) RelativeBlockPosition {
 		X: x,
 		Y: y,
 	}
-}
-
-func BlockPositionToIndex(p RelativeBlockPosition) int {
-	return p.Y*ChunkSize + p.X
 }
 
 func (c Coordinates) ToChunkPosition() ChunkPosition {
@@ -108,6 +109,13 @@ func (c Coordinates) ToRelativeBlockPosition() RelativeBlockPosition {
 		Y: int(p.Y % ChunkSize),
 	}
 	return rp
+}
+
+func (c BlockPosition) ToCoordinates() Coordinates {
+	return Coordinates{
+		X: int64(c.X) * BlockPixelSize,
+		Y: int64(c.Y) * BlockPixelSize,
+	}
 }
 
 func (c BlockPosition) ToChunkPosition() ChunkPosition {

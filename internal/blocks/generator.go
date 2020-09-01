@@ -160,7 +160,6 @@ func GenerateChunk(p *world.Planet, coords world.ChunkPosition) {
 		}
 		c.Data[i] = block
 	}
-	fmt.Printf("generated chunk %d,%d\n", coords.X, coords.Y)
 
 	p.Lock.Lock()
 	p.Chunks[coords] = c

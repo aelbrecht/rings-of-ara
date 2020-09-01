@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"image"
 	"image/color"
 	"rings-of-ara/internal/draw"
+	"rings-of-ara/internal/textures"
 	"rings-of-ara/internal/world"
 )
 
@@ -36,8 +38,20 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	curX, curY := ebiten.CursorPosition()
 	curWorldPos := g.World.Camera.ToWorld(world.Coordinates{int64(curX), int64(curY)})
-	curChunkPos := curWorldPos.ToChunkPosition()
 	curBlockPos := curWorldPos.ToBlockPosition()
+	curBlockCoordinates := curBlockPos.ToCoordinates()
+	hightlightX, hightlightY := g.World.Camera.ToScreen(curBlockCoordinates).ValuesFloat()
+
+	ops := ebiten.DrawImageOptions{}
+	ops.GeoM.Translate(0, -10)
+	ops.GeoM.Scale(3, 3)
+	ops.GeoM.Translate(hightlightX, hightlightY)
+	screen.DrawImage(textures.TileSetWorldInterface.SubImage(image.Rectangle{
+		Min: image.Point{0, 0},
+		Max: image.Point{10, 10},
+	}).(*ebiten.Image), &ops)
+
+	curChunkPos := curWorldPos.ToChunkPosition()
 	curRelBlockPos := curWorldPos.ToRelativeBlockPosition()
 	curBlock := g.World.Planet.GetBlock(curWorldPos)
 	var k uint16

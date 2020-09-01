@@ -29,14 +29,19 @@ type Planet struct {
 	Lock   sync.Mutex
 }
 
-func (p *Planet) GetBlock(c Coordinates) *Block {
+func (p *Planet) GetChunk(c Coordinates) *Chunk {
 	p.Lock.Lock()
 	ch := p.Chunks[c.ToChunkPosition()]
 	p.Lock.Unlock()
+	return ch
+}
+
+func (p *Planet) GetBlock(c Coordinates) *Block {
+	ch := p.GetChunk(c)
 	if ch == nil {
 		return nil
 	}
-	return &ch.Data[BlockPositionToIndex(c.ToRelativeBlockPosition())]
+	return &ch.Data[c.ToRelativeBlockPosition().Index()]
 }
 
 type Model struct {

@@ -1,9 +1,14 @@
 package events
 
 import (
+	"github.com/hajimehoshi/ebiten"
+	"image"
 	"math"
+	"rings-of-ara/internal/textures"
 	"rings-of-ara/internal/world"
 )
+
+var activeBlock uint16 = 0
 
 func HandleEvents(w *world.Model, container *EventQueue) {
 
@@ -34,8 +39,40 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 		event := container.Items[container.Size]
 
 		switch event.Kind {
+		case Key0:
+			activeBlock = 0
+			break
+		case Key1:
+			activeBlock = 1
+			break
+		case Primary:
+			// add/remove blocks
+
+			// get block pos from cursor
+			pos := event.Data.([]int)
+			curWorldPos := w.Camera.ToWorld(world.Coordinates{int64(pos[0]), int64(pos[1])})
+
+			// set block
+			chunk := w.Planet.GetChunk(curWorldPos)
+			var t *ebiten.Image
+			if activeBlock == 1 {
+				t = textures.TileSetUnderground.SubImage(image.Rectangle{
+					Min: image.Point{0, 0},
+					Max: image.Point{10, 10},
+				}).(*ebiten.Image)
+			}
+			// TODO: use generator to set blocks so that we don't have to manually set texture data
+			chunk.Data[curWorldPos.ToRelativeBlockPosition().Index()] = world.Block{
+				Solid: activeBlock != 0,
+				Kind:  activeBlock,
+				TexMain: t,
+			}
+			break
 		case Shift:
 			maxV = 6
+			break
+		case Alt:
+			w.Player.Vel.Y = 0
 			break
 		case Left:
 			w.Player.Vel.X += -0.2
