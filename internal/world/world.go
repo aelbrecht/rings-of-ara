@@ -5,12 +5,18 @@ import (
 	"sync"
 )
 
+type ColorOffset struct {
+	R float32
+	G float32
+	B float32
+}
+
 type Block struct {
-	Kind     uint16
-	Solid    bool
-	Variant  uint8
-	TexMain  *ebiten.Image
-	TexDeco  *ebiten.Image
+	Kind    uint16
+	Solid   bool
+	Offset  ColorOffset
+	TexMain *ebiten.Image
+	TexDeco *ebiten.Image
 }
 
 type Chunk struct {

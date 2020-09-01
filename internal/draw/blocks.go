@@ -17,7 +17,7 @@ func BlockLayer(w *world.Model, screen *ebiten.Image) {
 
 		for i, block := range chunk.Data {
 
-			if block.TexMain == nil {
+			if block.TexMain == nil && block.TexDeco == nil {
 				continue
 			}
 
@@ -34,13 +34,18 @@ func BlockLayer(w *world.Model, screen *ebiten.Image) {
 			x, y := w.Camera.ToScreen(pos).ValuesFloat()
 			op.GeoM.Translate(x, y)
 
-			sub := block.TexMain
-			top := block.TexDeco
+			if block.TexMain != nil {
+				screen.DrawImage(block.TexMain, &op)
+			}
 
-			screen.DrawImage(sub, &op)
-
-			if top != nil {
-				screen.DrawImage(top, &op)
+			if block.TexDeco != nil {
+				if block.Offset.R != 0 || block.Offset.G != 0 || block.Offset.B != 0 {
+					r := float64(block.Offset.R)
+					g := float64(block.Offset.G)
+					b := float64(block.Offset.B)
+					op.ColorM.Scale(1+r, 1+g, 1+b, 1)
+				}
+				screen.DrawImage(block.TexDeco, &op)
 			}
 		}
 	}

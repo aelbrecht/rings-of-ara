@@ -40,18 +40,27 @@ func TheoreticalSolidType(coords world.Coordinates) bool {
 	return false
 }
 
-func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image, *ebiten.Image) {
+func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image, *ebiten.Image, world.ColorOffset) {
+	offset := world.ColorOffset{}
 	lvl := surfaceLevel(coords)
 	if coords.Y-1 == lvl {
+		v := n.Eval2(float64(coords.X)/50, 0)
+		v1 := n.Eval2(float64(coords.X)/200, 0)
+		offset.G = float32(0.4*v - 0.2)
+		offset.B = float32(5*v1 - 0.2)
 		if rand.Float64() < 0.3 {
 			r := rand.Intn(6)
 			t := textures.TileSetGrassland.SubImage(image.Rectangle{
 				Min: image.Point{0 + 10*r, 10},
 				Max: image.Point{10 + 10*r, 20},
 			}).(*ebiten.Image)
-			return 3, t, nil
+			return 3, nil, t, offset
 		}
 	} else if coords.Y == lvl {
+		v := n.Eval2(float64(coords.X)/50, 0)
+		v1 := n.Eval2(float64(coords.X)/200, 0)
+		offset.G = float32(0.4*v - 0.2)
+		offset.B = float32(5*v1 - 0.2)
 		var front *ebiten.Image
 		var back *ebiten.Image
 		left := !TheoreticalSolidType(world.Coordinates{coords.X - 1, coords.Y})
@@ -95,16 +104,16 @@ func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image, *ebiten
 				Max: image.Point{20 + 10*r2, 10},
 			}).(*ebiten.Image)
 		}
-		return 2, back, front
+		return 2, back, front, offset
 	} else if coords.Y < lvl {
 		r := rand.Intn(3)
 		t := textures.TileSetUnderground.SubImage(image.Rectangle{
 			Min: image.Point{10 + 10*r, 0},
 			Max: image.Point{20 + 10*r, 10},
 		}).(*ebiten.Image)
-		return 1, t, nil
+		return 1, t, nil, offset
 	}
-	return 0, nil, nil
+	return 0, nil, nil, offset
 }
 
 func GenerateChunk(p *world.Planet, coords world.ChunkPosition) {
@@ -119,7 +128,7 @@ func GenerateChunk(p *world.Planet, coords world.ChunkPosition) {
 	for i, block := range c.Data {
 		bl := world.BlockIndexToPosition(i)
 		block.Solid = true
-		block.Kind, block.TexMain, block.TexDeco = GenerateBlockKind(world.CombineChunkBlockPosition(coords, bl))
+		block.Kind, block.TexMain, block.TexDeco, block.Offset = GenerateBlockKind(world.CombineChunkBlockPosition(coords, bl))
 		if block.Kind == 3 || block.Kind == 0 {
 			block.Solid = false
 		}
