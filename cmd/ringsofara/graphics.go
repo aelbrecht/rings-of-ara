@@ -54,9 +54,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	)
 
 	_ = ebitenutil.DebugPrint(screen,
-		fmt.Sprintf("TPS: %0.0f\nFPS: %0.0f\npos: %d,%d vel:%f,%f\n%s\n%s",
+		fmt.Sprintf("TPS: %0.0f\nFPS: %0.0f\nrender: %d\npos: %d,%d vel:%f,%f\n%s\n%s",
 			ebiten.CurrentTPS(),
 			ebiten.CurrentFPS(),
+			draw.BlockRenders,
 			g.World.Player.Pos.X,
 			g.World.Player.Pos.Y,
 			g.World.Player.Vel.X,
