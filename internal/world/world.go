@@ -6,10 +6,11 @@ import (
 )
 
 type Block struct {
-	Kind    uint16
-	Solid   bool
-	Variant uint8
-	Texture *ebiten.Image
+	Kind     uint16
+	Solid    bool
+	Variant  uint8
+	TexMain  *ebiten.Image
+	TexDeco  *ebiten.Image
 }
 
 type Chunk struct {

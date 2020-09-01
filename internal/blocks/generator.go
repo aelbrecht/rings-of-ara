@@ -40,7 +40,7 @@ func TheoreticalSolidType(coords world.Coordinates) bool {
 	return false
 }
 
-func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image) {
+func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image, *ebiten.Image) {
 	lvl := surfaceLevel(coords)
 	if coords.Y-1 == lvl {
 		if rand.Float64() < 0.3 {
@@ -49,44 +49,62 @@ func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image) {
 				Min: image.Point{0 + 10*r, 10},
 				Max: image.Point{10 + 10*r, 20},
 			}).(*ebiten.Image)
-			return 3, t
+			return 3, t, nil
 		}
 	} else if coords.Y == lvl {
-		var t *ebiten.Image
+		var front *ebiten.Image
+		var back *ebiten.Image
 		left := !TheoreticalSolidType(world.Coordinates{coords.X - 1, coords.Y})
 		right := !TheoreticalSolidType(world.Coordinates{coords.X + 1, coords.Y})
 		if right && left {
-			t = textures.TileSetGrassland.SubImage(image.Rectangle{
+			front = textures.TileSetGrassland.SubImage(image.Rectangle{
 				Min: image.Point{50, 0},
 				Max: image.Point{60, 10},
 			}).(*ebiten.Image)
+			back = textures.TileSetUnderground.SubImage(image.Rectangle{
+				Min: image.Point{60, 0},
+				Max: image.Point{70, 10},
+			}).(*ebiten.Image)
 		} else if right {
-			t = textures.TileSetGrassland.SubImage(image.Rectangle{
+			front = textures.TileSetGrassland.SubImage(image.Rectangle{
 				Min: image.Point{30, 0},
 				Max: image.Point{40, 10},
 			}).(*ebiten.Image)
-		} else if left {
-			t = textures.TileSetGrassland.SubImage(image.Rectangle{
+			back = textures.TileSetUnderground.SubImage(image.Rectangle{
 				Min: image.Point{40, 0},
 				Max: image.Point{50, 10},
 			}).(*ebiten.Image)
+		} else if left {
+			front = textures.TileSetGrassland.SubImage(image.Rectangle{
+				Min: image.Point{40, 0},
+				Max: image.Point{50, 10},
+			}).(*ebiten.Image)
+			back = textures.TileSetUnderground.SubImage(image.Rectangle{
+				Min: image.Point{50, 0},
+				Max: image.Point{60, 10},
+			}).(*ebiten.Image)
 		} else {
-			r := rand.Intn(3)
-			t = textures.TileSetGrassland.SubImage(image.Rectangle{
-				Min: image.Point{0 + 10*r, 0},
-				Max: image.Point{10 + 10*r, 10},
+			r1 := rand.Intn(3)
+			r2 := rand.Intn(3)
+			front = textures.TileSetGrassland.SubImage(image.Rectangle{
+				Min: image.Point{0 + 10*r1, 0},
+				Max: image.Point{10 + 10*r1, 10},
+			}).(*ebiten.Image)
+			back = textures.TileSetUnderground.SubImage(image.Rectangle{
+				Min: image.Point{10 + 10*r2, 0},
+				Max: image.Point{20 + 10*r2, 10},
 			}).(*ebiten.Image)
 		}
-		return 2, t
+		return 2, back, front
 	} else if coords.Y < lvl {
 		r := rand.Intn(3)
 		t := textures.TileSetUnderground.SubImage(image.Rectangle{
 			Min: image.Point{10 + 10*r, 0},
 			Max: image.Point{20 + 10*r, 10},
 		}).(*ebiten.Image)
-		return 1, t
+		return 1, t, nil
 	}
-	return 0, nil
+	return 0, nil, nil
 }
 
 func GenerateChunk(p *world.Planet, coords world.ChunkPosition) {
@@ -101,7 +119,7 @@ func GenerateChunk(p *world.Planet, coords world.ChunkPosition) {
 	for i, block := range c.Data {
 		bl := world.BlockIndexToPosition(i)
 		block.Solid = true
-		block.Kind, block.Texture = GenerateBlockKind(world.CombineChunkBlockPosition(coords, bl))
+		block.Kind, block.TexMain, block.TexDeco = GenerateBlockKind(world.CombineChunkBlockPosition(coords, bl))
 		if block.Kind == 3 || block.Kind == 0 {
 			block.Solid = false
 		}

@@ -2,7 +2,6 @@ package events
 
 import (
 	"math"
-	"rings-of-ara/internal/draw"
 	"rings-of-ara/internal/world"
 )
 
@@ -62,10 +61,6 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 			break
 		case Down:
 			w.Player.Vel.Y = -4
-			break
-		case Debug:
-			w.Debug = !w.Debug
-			draw.ClearChunks()
 			break
 		}
 	}
