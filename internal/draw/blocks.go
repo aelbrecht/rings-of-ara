@@ -35,7 +35,9 @@ func renderLayer(w *world.Model, layer *ebiten.Image, draw func(*world.Block, *e
 	// draw visible chunks on screen
 	for _, coords := range w.Camera.VisibleChunks() {
 
+		w.Planet.Lock.Lock()
 		chunk := w.Planet.Chunks[coords]
+		w.Planet.Lock.Unlock()
 		if chunk == nil {
 			continue
 		}
