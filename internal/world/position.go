@@ -80,6 +80,9 @@ type RelativeBlockPosition struct {
 func (pos RelativeBlockPosition) Values() (int, int) {
 	return pos.X, pos.Y
 }
+func (pos RelativeBlockPosition) ValuesFloat() (float64, float64) {
+	return float64(pos.X), float64(pos.Y)
+}
 
 func BlockIndexToPosition(i int) RelativeBlockPosition {
 	y := i / ChunkSize

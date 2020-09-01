@@ -17,12 +17,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	_ = screen.Fill(color.RGBA{228, 241, 254, 255})
 
 	// fill block layer
-	g.Buffers.BlockLayer.Clear()
-	draw.BlockLayer(g.World, g.Buffers.BlockLayer)
-	_ = screen.DrawImage(g.Buffers.BlockLayer, nil)
+	g.Buffers.BlockBackLayer.Clear()
+	g.Buffers.BlockFrontLayer.Clear()
+	draw.BlockLayer(g.World, g.Buffers.BlockFrontLayer, g.Buffers.BlockBackLayer)
+
+	_ = screen.DrawImage(g.Buffers.BlockBackLayer, nil)
 
 	d := g.World.Player.Draw
 	d(g.World.Player, g.World, screen)
+
+	_ = screen.DrawImage(g.Buffers.BlockFrontLayer, nil)
 
 	chunkDebug := ""
 	activeChunks := g.World.Camera.VisibleChunks()

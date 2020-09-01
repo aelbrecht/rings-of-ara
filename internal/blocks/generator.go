@@ -44,23 +44,49 @@ func GenerateBlockKind(coords world.Coordinates) (uint16, *ebiten.Image, *ebiten
 	offset := world.ColorOffset{}
 	lvl := surfaceLevel(coords)
 	if coords.Y-1 == lvl {
+		left := !TheoreticalSolidType(world.Coordinates{coords.X - 1, coords.Y - 1})
+		right := !TheoreticalSolidType(world.Coordinates{coords.X + 1, coords.Y - 1})
 		v := n.Eval2(float64(coords.X)/50, 0)
 		v1 := n.Eval2(float64(coords.X)/200, 0)
-		offset.G = float32(0.4*v - 0.2)
-		offset.B = float32(5*v1 - 0.2)
-		if rand.Float64() < 0.3 {
-			r := rand.Intn(6)
-			t := textures.TileSetGrassland.SubImage(image.Rectangle{
-				Min: image.Point{0 + 10*r, 10},
-				Max: image.Point{10 + 10*r, 20},
-			}).(*ebiten.Image)
-			return 3, nil, t, offset
+		offset.G = float32(0.25*v + 0.75)
+		offset.R = float32(0.5 * v1)
+		r1 := rand.Intn(2)
+		r2 := rand.Intn(6)
+		if rand.Float32() < 0.6 {
+			r2 = 7
 		}
+		var t1 *ebiten.Image
+		if left && right {
+			t1 = textures.TileSetGrassland.SubImage(image.Rectangle{
+				Min: image.Point{20, 10},
+				Max: image.Point{30, 20},
+			}).(*ebiten.Image)
+		} else if left {
+			t1 = textures.TileSetGrassland.SubImage(image.Rectangle{
+				Min: image.Point{40, 10},
+				Max: image.Point{50, 20},
+			}).(*ebiten.Image)
+		} else if right {
+			t1 = textures.TileSetGrassland.SubImage(image.Rectangle{
+				Min: image.Point{30, 10},
+				Max: image.Point{40, 20},
+			}).(*ebiten.Image)
+		} else {
+			t1 = textures.TileSetGrassland.SubImage(image.Rectangle{
+				Min: image.Point{0 + 10*r1, 10},
+				Max: image.Point{10 + 10*r1, 20},
+			}).(*ebiten.Image)
+		}
+		t2 := textures.TileSetGrassland.SubImage(image.Rectangle{
+			Min: image.Point{0 + 10*r2, 20},
+			Max: image.Point{10 + 10*r2, 30},
+		}).(*ebiten.Image)
+		return 3, t2, t1, offset
 	} else if coords.Y == lvl {
 		v := n.Eval2(float64(coords.X)/50, 0)
 		v1 := n.Eval2(float64(coords.X)/200, 0)
-		offset.G = float32(0.4*v - 0.2)
-		offset.B = float32(5*v1 - 0.2)
+		offset.G = float32(0.25*v + 0.75)
+		offset.R = float32(0.5 * v1)
 		var front *ebiten.Image
 		var back *ebiten.Image
 		left := !TheoreticalSolidType(world.Coordinates{coords.X - 1, coords.Y})

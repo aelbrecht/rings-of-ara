@@ -5,7 +5,7 @@ import (
 	"rings-of-ara/internal/world"
 )
 
-func BlockLayer(w *world.Model, screen *ebiten.Image) {
+func BlockLayer(w *world.Model, front *ebiten.Image, back *ebiten.Image) {
 
 	// draw visible chunks on screen
 	for _, coords := range w.Camera.VisibleChunks() {
@@ -35,7 +35,7 @@ func BlockLayer(w *world.Model, screen *ebiten.Image) {
 			op.GeoM.Translate(x, y)
 
 			if block.TexMain != nil {
-				screen.DrawImage(block.TexMain, &op)
+				back.DrawImage(block.TexMain, &op)
 			}
 
 			if block.TexDeco != nil {
@@ -45,7 +45,7 @@ func BlockLayer(w *world.Model, screen *ebiten.Image) {
 					b := float64(block.Offset.B)
 					op.ColorM.Scale(1+r, 1+g, 1+b, 1)
 				}
-				screen.DrawImage(block.TexDeco, &op)
+				front.DrawImage(block.TexDeco, &op)
 			}
 		}
 	}
