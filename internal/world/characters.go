@@ -7,6 +7,8 @@ type Character struct {
 	Settled   bool
 	Mask      CharacterMask
 	Pos       Coordinates
+	Target    Coordinates
+	Aiming    Vector
 	Vel       Vector
 	Draw      func(*Character, *Model, *ebiten.Image)
 	Direction int

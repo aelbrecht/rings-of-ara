@@ -1,7 +1,6 @@
 package blocks
 
 import (
-	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/ojrac/opensimplex-go"
 	"image"

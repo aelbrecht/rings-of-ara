@@ -39,6 +39,11 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 		event := container.Items[container.Size]
 
 		switch event.Kind {
+		case Move:
+			data := event.Data.([]int)
+			target := w.Camera.ToWorld(world.Coordinates{int64(data[0]), int64(data[1])})
+			w.Player.Target = target
+			break
 		case Key0:
 			activeBlock = 0
 			break
@@ -63,8 +68,8 @@ func HandleEvents(w *world.Model, container *EventQueue) {
 			}
 			// TODO: use generator to set blocks so that we don't have to manually set texture data
 			chunk.Data[curWorldPos.ToRelativeBlockPosition().Index()] = world.Block{
-				Solid: activeBlock != 0,
-				Kind:  activeBlock,
+				Solid:   activeBlock != 0,
+				Kind:    activeBlock,
 				TexMain: t,
 			}
 			break
