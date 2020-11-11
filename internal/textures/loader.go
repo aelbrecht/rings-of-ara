@@ -2,20 +2,18 @@ package textures
 
 import "github.com/hajimehoshi/ebiten"
 
-type TileSet = *ebiten.Image
-
 var SpriteAlycia *Texture
-var TileSetGrassland TileSet
-var TileSetUnderground TileSet
-var TileSetWorldInterface TileSet
-var TileSetWeapons TileSet
+var TileSetGrassland *ebiten.Image
+var TileSetUnderground *ebiten.Image
+var TileSetWorldInterface *ebiten.Image
+var TileSetWeapons *ebiten.Image
 
-const AssetsDir = "./assets/"
+const AssetsDir = "./assets"
 
 func init() {
-	SpriteAlycia = LoadTexture(AssetsDir + "sprites/alycia.png")
-	TileSetGrassland = LoadTileSet(AssetsDir + "world/grassland.png")
-	TileSetUnderground = LoadTileSet(AssetsDir + "world/underground.png")
-	TileSetWorldInterface = LoadTileSet(AssetsDir + "interface/world.png")
-	TileSetWeapons = LoadTileSet(AssetsDir + "sprites/weapons.png")
+	SpriteAlycia = LoadTexture(AssetsDir + "/sprites/alycia.png")
+	TileSetGrassland = LoadImage(AssetsDir + "/world/grassland.png")
+	TileSetUnderground = LoadImage(AssetsDir + "/world/underground.png")
+	TileSetWorldInterface = LoadImage(AssetsDir + "/interface/world.png")
+	TileSetWeapons = LoadImage(AssetsDir + "/sprites/weapons.png")
 }

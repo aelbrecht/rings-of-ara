@@ -25,8 +25,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	_ = screen.DrawImage(g.Buffers.BlockBackLayer, nil)
 
-	d := g.World.Player.Draw
-	d(g.World.Player, g.World, screen)
+	draw.DrawCharacter(g.World.Player, g.World, screen)
 
 	_ = screen.DrawImage(g.Buffers.BlockFrontLayer, nil)
 
