@@ -27,7 +27,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	draw.DrawCharacter(g.World.Player, g.World, screen)
 
-	_ = screen.DrawImage(g.Buffers.BlockFrontLayer, nil)
+	//_ = screen.DrawImage(g.Buffers.BlockFrontLayer, nil)
 
 	chunkDebug := ""
 	activeChunks := g.World.Camera.VisibleChunks()

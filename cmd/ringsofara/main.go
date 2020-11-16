@@ -60,8 +60,8 @@ func main() {
 	alysia := world.CharacterFeature{
 		Texture:  textures.CharacterUpper.GetTile(0, 0),
 		Rotation: 0,
-		OffsetX:  64,
-		OffsetY:  64,
+		OffsetX:  31,
+		OffsetY:  31,
 		AnchorX:  16,
 		AnchorY:  12,
 		ChildrenBefore: []world.CharacterFeature{
@@ -95,13 +95,13 @@ func main() {
 				AnchorX:        16,
 				AnchorY:        32 - 7 - 3,
 				ChildrenBefore: nil,
-			},{
-				Texture:        nil,
-				Rotation:       0,
-				OffsetX:        0,
-				OffsetY:        11,
-				AnchorX:        7,
-				AnchorY:        1,
+			}, {
+				Texture:  nil,
+				Rotation: 0,
+				OffsetX:  0,
+				OffsetY:  11,
+				AnchorX:  7,
+				AnchorY:  1,
 				ChildrenBefore: []world.CharacterFeature{
 					{
 						Texture:  textures.CharacterLimbs.GetTile(1, 1),
@@ -112,12 +112,12 @@ func main() {
 						AnchorY:  1,
 						ChildrenBehind: []world.CharacterFeature{
 							{
-								Texture:        textures.CharacterLimbs.GetTile(1, 1),
-								Rotation:       0,
-								OffsetX:        0,
-								OffsetY:        7,
-								AnchorX:        1,
-								AnchorY:        1,
+								Texture:  textures.CharacterLimbs.GetTile(1, 1),
+								Rotation: 0,
+								OffsetX:  0,
+								OffsetY:  7,
+								AnchorX:  1,
+								AnchorY:  1,
 								ChildrenBefore: []world.CharacterFeature{
 									{
 										Texture:        textures.CharacterFeet.GetTile(1, 0),
@@ -135,7 +135,7 @@ func main() {
 				},
 			}, {
 				Texture:  textures.CharacterLimbs.GetTile(2, 0),
-				Rotation: 0.4,
+				Rotation: 1,
 				OffsetX:  -8,
 				OffsetY:  -2,
 				AnchorX:  1,
@@ -143,7 +143,7 @@ func main() {
 				ChildrenBehind: []world.CharacterFeature{
 					{
 						Texture:        textures.CharacterLimbs.GetTile(0, 0),
-						Rotation:       -1,
+						Rotation:       1,
 						OffsetX:        0,
 						OffsetY:        7,
 						AnchorX:        1,
@@ -201,13 +201,13 @@ func main() {
 						Darken:   0.02,
 						ChildrenBehind: []world.CharacterFeature{
 							{
-								Texture:        textures.CharacterLimbs.GetTile(1, 1),
-								Rotation:       0,
-								OffsetX:        0,
-								OffsetY:        7,
-								AnchorX:        1,
-								AnchorY:        1,
-								Darken:         0.02,
+								Texture:  textures.CharacterLimbs.GetTile(1, 1),
+								Rotation: 0,
+								OffsetX:  0,
+								OffsetY:  7,
+								AnchorX:  1,
+								AnchorY:  1,
+								Darken:   0.02,
 								ChildrenBefore: []world.CharacterFeature{
 									{
 										Texture:        textures.CharacterFeet.GetTile(1, 0),
