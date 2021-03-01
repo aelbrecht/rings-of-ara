@@ -16,7 +16,18 @@ import (
 func (g *Game) Draw(screen *ebiten.Image) {
 
 	// fill sky
-	_ = screen.Fill(color.RGBA{228, 241, 254, 255})
+	//_ = screen.Fill(color.RGBA{228, 241, 254, 255})
+	_ = screen.Fill(color.RGBA{
+		R: 200,
+		G: 220,
+		B: 180,
+		A: 255,
+	})
+
+	// fill background
+	g.Buffers.BackgroundLayer.Clear()
+	draw.BackgroundLayer(g.World, g.Buffers.BackgroundLayer)
+	screen.DrawImage(g.Buffers.BackgroundLayer, nil)
 
 	// fill block layer
 	g.Buffers.BlockBackLayer.Clear()

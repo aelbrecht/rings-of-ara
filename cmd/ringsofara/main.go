@@ -19,6 +19,7 @@ type GameProperties struct {
 }
 
 type GameBuffers struct {
+	BackgroundLayer *ebiten.Image
 	BlockBackLayer  *ebiten.Image
 	BlockFrontLayer *ebiten.Image
 }
@@ -65,6 +66,7 @@ func main() {
 	}
 
 	bufferBlockBackLayer, _ := ebiten.NewImage(screen.W, screen.H, ebiten.FilterDefault)
+	bufferBackgroundLayer, _ := ebiten.NewImage(screen.W, screen.H, ebiten.FilterDefault)
 	bufferBlockFrontLayer, _ := ebiten.NewImage(screen.W, screen.H, ebiten.FilterDefault)
 
 	g := &Game{
@@ -88,6 +90,7 @@ func main() {
 		Buffers: GameBuffers{
 			BlockBackLayer:  bufferBlockBackLayer,
 			BlockFrontLayer: bufferBlockFrontLayer,
+			BackgroundLayer: bufferBackgroundLayer,
 		},
 	}
 
